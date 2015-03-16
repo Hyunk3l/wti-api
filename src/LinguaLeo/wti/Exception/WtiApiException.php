@@ -2,4 +2,6 @@
 
 namespace LinguaLeo\wti\Exception;
 
-class WtiApiException extends \Exception {}
+class WtiApiException extends \Exception
+{
+}
