@@ -4,21 +4,65 @@ namespace LinguaLeo\wti;
 
 use LinguaLeo\wti\Exception\WtiApiException;
 
+/**
+ * Class WtiApiRequest
+ * @package LinguaLeo\wti
+ */
 class WtiApiRequest
 {
-
+	/**
+	 * @var
+	 */
 	private $resource;
+
+	/**
+	 * Error.
+	 *
+	 * @var string
+	 */
 	private $error;
+
+	/**
+	 * Error number.
+	 *
+	 * @var integer
+	 */
 	private $errno;
+
+	/**
+	 * Api result.
+	 *
+	 * @var mixed.
+	 */
 	private $result;
+
+	/**
+	 * Headers.
+	 *
+	 * @var mixed.
+	 */
 	private $headers;
+
+	/**
+	 * Is request runned.
+	 *
+	 * @var boolean
+	 */
 	private $isRequestRunned = false;
 
+	/**
+	 * Class constructor.
+	 *
+	 * @param $resource
+	 */
 	public function __construct($resource)
 	{
 		$this->resource = $resource;
 	}
 
+	/**
+	 * Run.
+	 */
 	public function run()
 	{
 		$this->isRequestRunned = true;
@@ -34,13 +78,19 @@ class WtiApiRequest
 		}
 	}
 
+	/**
+	 * Prepare Headers.
+	 *
+	 * @param string $headersString
+	 * @return array
+	 */
 	private function prepareHeaders($headersString)
 	{
-		$headersArray = explode("\n", $headersString);
+		$headersArray = explode(PHP_EOL, $headersString);
 		// Remove first header, HTTP code
 		array_shift($headersArray);
 
-		$headersAssoc = [];
+		$headersAssoc = array();
 
 		foreach ($headersArray as $header) {
 			if ($header === '') {
@@ -55,16 +105,32 @@ class WtiApiRequest
 		return $headersAssoc;
 	}
 
+	/**
+	 * Get error.
+	 *
+	 * @return mixed
+	 */
 	public function getError()
 	{
 		return $this->error;
 	}
 
+	/**
+	 * Get Error number.
+	 *
+	 * @return mixed
+	 */
 	public function getErrno()
 	{
 		return $this->errno;
 	}
 
+	/**
+	 * Get Raw result.
+	 *
+	 * @return mixed
+	 * @throws WtiApiException
+	 */
 	public function getRawResult()
 	{
 		if (!$this->isRequestRunned) {
@@ -73,6 +139,13 @@ class WtiApiRequest
 		return $this->result;
 	}
 
+	/**
+	 * Get result.
+	 *
+	 * @param boolean $assoc
+	 * @return mixed|null
+	 * @throws WtiApiException
+	 */
 	public function getResult($assoc = false)
 	{
 		if (!$this->isRequestRunned) {
@@ -81,6 +154,12 @@ class WtiApiRequest
 		return $this->result ? json_decode($this->result, $assoc) : null;
 	}
 
+	/**
+	 * Get Headers.
+	 *
+	 * @return mixed
+	 * @throws WtiApiException
+	 */
 	public function getHeaders()
 	{
 		if (!$this->isRequestRunned) {

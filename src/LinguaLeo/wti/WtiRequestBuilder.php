@@ -10,7 +10,7 @@ class WtiRequestBuilder
 	private $apiKey;
 	private $endpoint;
 	private $method;
-	private $params = [];
+	private $params = array();
 	private $resource;
 	private $jsonEncodeParams = true;
 	private $isJsonToEndpointAdded = true;
@@ -59,7 +59,7 @@ class WtiRequestBuilder
 			curl_setopt($this->resource, CURLOPT_POSTFIELDS, $params);
 		} else {
 			curl_setopt($this->resource, CURLOPT_POST, false);
-			curl_setopt($this->resource, CURLOPT_POSTFIELDS, []);
+			curl_setopt($this->resource, CURLOPT_POSTFIELDS, array());
 		}
 
 		curl_setopt($this->resource, CURLOPT_URL, $this->buildRequestUrl());
@@ -101,7 +101,7 @@ class WtiRequestBuilder
 		$params = array_filter($this->params, function ($e) {
 			return !is_null($e);
 		});
-		return $params ? http_build_query($params) : [];
+		return $params ? http_build_query($params) : array();
 	}
 
 } 

@@ -4,9 +4,12 @@ namespace LinguaLeo\wti;
 
 use LinguaLeo\wti\Exception\WtiApiException;
 
+/**
+ * Class WtiApi
+ * @package LinguaLeo\wti
+ */
 class WtiApi
 {
-
 	/** @var object */
 	private $info;
 	/** @var string */
@@ -18,7 +21,7 @@ class WtiApi
 
 	/**
 	 * @param string $apiKey
-	 * @param bool $initProjectInfo
+	 * @param boolean $initProjectInfo
 	 * @throws Exception\WtiApiException
 	 */
 	public function __construct($apiKey, $initProjectInfo = true)
@@ -123,10 +126,16 @@ class WtiApi
 		return $this->listStrings($params);
 	}
 
+	/**
+	 * @param null $params
+	 * @param integer $page
+	 * @return array|mixed|null
+	 * @throws WtiApiException
+	 */
 	public function listStrings($params = null, $page = 1)
 	{
 		if ($params == null) {
-			$params = [];
+			$params = array();
 		}
 		$params['page'] = intval($page);
 		$this->request = $this->builder()
@@ -136,7 +145,7 @@ class WtiApi
 			->build();
 		$this->request->run();
 		$requestResult = $this->request->getResult();
-		$result = $requestResult ? $requestResult : [];
+		$result = $requestResult ? $requestResult : array();
 
 		if (count($result) && $this->isRequestHasNextPage()) {
 			$result += $this->listStrings($params, ++$page);
@@ -145,6 +154,12 @@ class WtiApi
 		return $result;
 	}
 
+	/**
+	 * Check if request has next page.
+	 *
+	 * @return boolean
+	 * @throws WtiApiException
+	 */
 	private function isRequestHasNextPage()
 	{
 		$responseHeaders = $this->request->getHeaders();
@@ -194,7 +209,7 @@ class WtiApi
 	 * @param array $params
 	 * @return mixed|null
 	 */
-	public function getProjectStatistics($params = [])
+	public function getProjectStatistics($params = array())
 	{
 		$this->request = $this->builder()
 			->setMethod(RequestMethod::GET)
@@ -209,7 +224,7 @@ class WtiApi
 	 * @param array $params
 	 * @return mixed|null]
 	 */
-	public function getTopTranslators($params = [])
+	public function getTopTranslators($params = array())
 	{
 		$this->request = $this->builder()
 			->setMethod(RequestMethod::GET)
@@ -388,9 +403,9 @@ class WtiApi
 	 * @param $localeCode
 	 * @param $name
 	 * @param $filePath
-	 * @param bool $merge
-	 * @param bool $ignoreMissing
-	 * @param bool $minorChanges
+	 * @param boolean $merge
+	 * @param boolean $ignoreMissing
+	 * @param boolean $minorChanges
 	 * @param null $label
 	 * @param string $mime
 	 * @return mixed
@@ -434,7 +449,7 @@ class WtiApi
 	public function createEmptyFile($filename, $ext = 'json')
 	{
 		$path = implode(DIRECTORY_SEPARATOR, [sys_get_temp_dir(), uniqid() . '.' . $ext]);
-		file_put_contents($path, json_encode([], JSON_FORCE_OBJECT));
+		file_put_contents($path, json_encode(array(), JSON_FORCE_OBJECT));
 		$masterId = (int)$this->createFile($filename, $path);
 		if (!$masterId) {
 			throw new WtiApiException('Cannot create master file with filename' . $filename);
@@ -459,7 +474,7 @@ class WtiApi
 	}
 
 	/**
-	 * @param int $stringId
+	 * @param integer $stringId
 	 * @param string $label
 	 * @return mixed|null
 	 */
@@ -478,11 +493,11 @@ class WtiApi
 	}
 
 	/**
-	 * @param int $membershipId
+	 * @param integer $membershipId
 	 * @param array $params
 	 * @return mixed|null
 	 */
-	public function updateMembership($membershipId, array $params = [])
+	public function updateMembership($membershipId, array $params = array())
 	{
 		$this->request = $this->builder()
 			->setMethod(RequestMethod::PUT)
@@ -515,7 +530,7 @@ class WtiApi
 	 *                  ]
 	 * @return mixed|null
 	 */
-	public function listUsers($params = [])
+	public function listUsers($params = array())
 	{
 		$this->request = $this->builder()
 			->setMethod(RequestMethod::GET)
@@ -531,7 +546,7 @@ class WtiApi
 	 * @param array $params
 	 * @return bool|mixed
 	 */
-	public function approveInvitation($invitationId, $params = [])
+	public function approveInvitation($invitationId, $params = array())
 	{
 		$this->request = $this->builder()
 			->setMethod(RequestMethod::PUT)
