@@ -46,6 +46,7 @@ class WtiApiRequestTest extends \PHPUnit_Framework_TestCase
         curl_setopt($resource, CURLOPT_CUSTOMREQUEST, 'GET');
         curl_setopt($resource, CURLOPT_POST, false);
         curl_setopt($resource, CURLOPT_POSTFIELDS, array());
+
         return $resource;
     }
 
@@ -76,8 +77,8 @@ class WtiApiRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testRunWithResultsAsObject()
     {
-        $resource               = $this->getFakeCurlResource(static::API_FAKE_URL);
-        $this->wti_api_request  = new WtiApiRequest($resource);
+        $resource = $this->getFakeCurlResource(static::API_FAKE_URL);
+        $this->wti_api_request = new WtiApiRequest($resource);
         $this->wti_api_request->run();
         $result = $this->wti_api_request->getResult();
         $this->assertTrue(is_object($result));
@@ -89,8 +90,8 @@ class WtiApiRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testRunWithResultsAsArray()
     {
-        $resource               = $this->getFakeCurlResource(static::API_FAKE_URL);
-        $this->wti_api_request  = new WtiApiRequest($resource);
+        $resource = $this->getFakeCurlResource(static::API_FAKE_URL);
+        $this->wti_api_request = new WtiApiRequest($resource);
         $this->wti_api_request->run();
         $result = $this->wti_api_request->getResult(true);
         $this->assertFalse(is_object($result));
@@ -102,8 +103,8 @@ class WtiApiRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testResultHasHeaders()
     {
-        $resource               = $this->getFakeCurlResource(static::API_FAKE_URL);
-        $this->wti_api_request  = new WtiApiRequest($resource);
+        $resource = $this->getFakeCurlResource(static::API_FAKE_URL);
+        $this->wti_api_request = new WtiApiRequest($resource);
         $this->wti_api_request->run();
         $headers = $this->wti_api_request->getHeaders();
         $this->assertInternalType('array', $headers);
@@ -116,8 +117,8 @@ class WtiApiRequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testResultIsRaw()
     {
-        $resource               = $this->getFakeCurlResource(static::API_FAKE_URL);
-        $this->wti_api_request  = new WtiApiRequest($resource);
+        $resource = $this->getFakeCurlResource(static::API_FAKE_URL);
+        $this->wti_api_request = new WtiApiRequest($resource);
         $this->wti_api_request->run();
         $raw_result = $this->wti_api_request->getRawResult();
         $this->assertTrue(is_string($raw_result));

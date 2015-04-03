@@ -11,6 +11,13 @@ use LinguaLeo\wti\Exception\WtiApiException;
 class WtiApiRequest
 {
     /**
+     * Valid Header parts.
+     *
+     * @var integer
+     */
+    const VALID_HEADER_PARTS = 3;
+
+    /**
      * @var
      */
     private $resource;
@@ -81,28 +88,39 @@ class WtiApiRequest
     /**
      * Prepare Headers.
      *
-     * @param string $headersString
+     * @param string $headers_string
      * @return array
      */
-    private function prepareHeaders($headersString)
+    private function prepareHeaders($headers_string)
     {
-        $headersArray = explode(PHP_EOL, $headersString);
-        // Remove first header, HTTP code
-        array_shift($headersArray);
-
-        $headersAssoc = array();
+        $headers = explode(PHP_EOL, $headers_string);
+        $headersArray = $this->removeHttpCode($headers);
+        $associative_headers = array();
 
         foreach ($headersArray as $header) {
-            if ($header === '') {
+            if (empty($header)) {
                 continue;
             }
             preg_match('~^([^:]*)\:(.*)$~', $header, $matches);
-            if (count($matches) == 3) {
-                $headersAssoc[$matches[1]] = trim($matches[2]);
+            if (static::VALID_HEADER_PARTS === count($matches)) {
+                $associative_headers[$matches[1]] = trim($matches[2]);
             }
         }
 
-        return $headersAssoc;
+        return $associative_headers;
+    }
+
+    /**
+     * Remove first element of the header array: http code.
+     *
+     * @param array $headers
+     * @return array
+     */
+    private function removeHttpCode(array $headers)
+    {
+        array_shift($headers);
+
+        return $headers;
     }
 
     /**
